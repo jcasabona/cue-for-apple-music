@@ -1,0 +1,214 @@
+{
+	"$schema": "https://schemas.elgato.com/streamdeck/plugins/manifest.json",
+	"Name": "Music Controls",
+	"UUID": "org.casabona.musiccontrols",
+	"Version": "1.2.0.0",
+	"Author": "Joe Casabona",
+	"Description": "Control the macOS Music app from your Stream Deck. A play/pause key that shows the current album art, skip, shuffle, repeat, favorite and one-press playlists, with volume and transport on Stream Deck + dials.",
+	"Category": "Music Controls",
+	"CategoryIcon": "imgs/plugin/category-icon",
+	"Icon": "imgs/plugin/marketplace",
+	"URL": "https://casabona.org",
+	"SDKVersion": 2,
+	"CodePath": "bin/plugin.js",
+	"Nodejs": {
+		"Version": "20"
+	},
+	"Software": {
+		"MinimumVersion": "6.5"
+	},
+	"OS": [
+		{
+			"Platform": "mac",
+			"MinimumVersion": "12"
+		}
+	],
+	"ApplicationsToMonitor": {
+		"mac": [
+			"com.apple.Music"
+		]
+	},
+	"Actions": [
+		{
+			"Name": "Play / Pause",
+			"UUID": "org.casabona.musiccontrols.play-pause",
+			"Icon": "imgs/actions/play-pause/icon",
+			"Tooltip": "Toggle playback in Music.",
+			"Controllers": [
+				"Keypad"
+			],
+			"DisableAutomaticStates": true,
+			"PropertyInspectorPath": "ui/play-pause.html",
+			"States": [
+				{
+					"Image": "imgs/actions/play-pause/play",
+					"TitleAlignment": "bottom",
+					"FontSize": 10
+				},
+				{
+					"Image": "imgs/actions/play-pause/pause",
+					"TitleAlignment": "bottom",
+					"FontSize": 10
+				}
+			]
+		},
+		{
+			"Name": "Next Track",
+			"UUID": "org.casabona.musiccontrols.next-track",
+			"Icon": "imgs/actions/next-track/icon",
+			"Tooltip": "Skip to the next track.",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "imgs/actions/next-track/key",
+					"TitleAlignment": "middle"
+				}
+			]
+		},
+		{
+			"Name": "Previous Track",
+			"UUID": "org.casabona.musiccontrols.previous-track",
+			"Icon": "imgs/actions/previous-track/icon",
+			"Tooltip": "Go back a track, or restart the current one.",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "imgs/actions/previous-track/key",
+					"TitleAlignment": "middle"
+				}
+			]
+		},
+		{
+			"Name": "Shuffle",
+			"UUID": "org.casabona.musiccontrols.shuffle",
+			"Icon": "imgs/actions/shuffle/icon",
+			"Tooltip": "Turn shuffle on or off.",
+			"Controllers": [
+				"Keypad"
+			],
+			"DisableAutomaticStates": true,
+			"States": [
+				{
+					"Image": "imgs/actions/shuffle/off",
+					"TitleAlignment": "middle"
+				},
+				{
+					"Image": "imgs/actions/shuffle/on",
+					"TitleAlignment": "middle"
+				}
+			]
+		},
+		{
+			"Name": "Repeat",
+			"UUID": "org.casabona.musiccontrols.repeat",
+			"Icon": "imgs/actions/repeat/icon",
+			"Tooltip": "Cycle repeat off, all, one.",
+			"Controllers": [
+				"Keypad"
+			],
+			"DisableAutomaticStates": true,
+			"States": [
+				{
+					"Image": "imgs/actions/repeat/off",
+					"TitleAlignment": "middle"
+				},
+				{
+					"Image": "imgs/actions/repeat/all",
+					"TitleAlignment": "middle"
+				},
+				{
+					"Image": "imgs/actions/repeat/one",
+					"TitleAlignment": "middle"
+				}
+			]
+		},
+		{
+			"Name": "Favorite",
+			"UUID": "org.casabona.musiccontrols.favorite",
+			"Icon": "imgs/actions/favorite/icon",
+			"Tooltip": "Favorite or unfavorite the current track.",
+			"Controllers": [
+				"Keypad"
+			],
+			"DisableAutomaticStates": true,
+			"States": [
+				{
+					"Image": "imgs/actions/favorite/off",
+					"TitleAlignment": "middle"
+				},
+				{
+					"Image": "imgs/actions/favorite/on",
+					"TitleAlignment": "middle"
+				}
+			]
+		},
+		{
+			"Name": "Playlist",
+			"UUID": "org.casabona.musiccontrols.playlist",
+			"Icon": "imgs/actions/playlist/icon",
+			"Tooltip": "Start a specific playlist.",
+			"Controllers": [
+				"Keypad"
+			],
+			"PropertyInspectorPath": "ui/playlist.html",
+			"States": [
+				{
+					"Image": "imgs/actions/playlist/key",
+					"TitleAlignment": "bottom",
+					"FontSize": 10
+				}
+			]
+		},
+		{
+			"Name": "Volume",
+			"UUID": "org.casabona.musiccontrols.volume-dial",
+			"Icon": "imgs/actions/volume-dial/icon",
+			"Tooltip": "Turn to change Music's volume.",
+			"Controllers": [
+				"Encoder"
+			],
+			"PropertyInspectorPath": "ui/volume-dial.html",
+			"Encoder": {
+				"Icon": "imgs/actions/volume-dial/encoder",
+				"layout": "$B1",
+				"TriggerDescription": {
+					"Rotate": "Volume",
+					"Push": "Play / Pause",
+					"Touch": "Next Track"
+				}
+			},
+			"States": [
+				{
+					"Image": "imgs/actions/volume-dial/key"
+				}
+			]
+		},
+		{
+			"Name": "Transport",
+			"UUID": "org.casabona.musiccontrols.transport-dial",
+			"Icon": "imgs/actions/transport-dial/icon",
+			"Tooltip": "Turn to change track, press to play or pause.",
+			"Controllers": [
+				"Encoder"
+			],
+			"Encoder": {
+				"Icon": "imgs/actions/transport-dial/encoder",
+				"layout": "$A1",
+				"TriggerDescription": {
+					"Rotate": "Change Track",
+					"Push": "Play / Pause",
+					"Touch": "Play / Pause"
+				}
+			},
+			"States": [
+				{
+					"Image": "imgs/actions/transport-dial/key"
+				}
+			]
+		}
+	]
+}
