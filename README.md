@@ -1,4 +1,4 @@
-# Music Controls
+# Cue for Apple Musaic
 
 A Stream Deck plugin for the macOS Music app. Nine actions: seven keys and two dials.
 
@@ -8,7 +8,7 @@ plugin.
 
 This is a plugin I created for my personal use and released to the public in-case it's
 useful to anyone else. It is not supported software, and I make no guarantees on
-performance or future releases.
+performance or future releases. **Use at your own risk**.
 
 It was written entirely with Claude Code. The images and some of the copy associated with the plugin were also generated with Claude.
 
