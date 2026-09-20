@@ -1,4 +1,4 @@
-# Cue for Apple Musaic
+# Cue for Apple Music
 
 A Stream Deck plugin for the macOS Music app. Nine actions: seven keys and two dials.
 
