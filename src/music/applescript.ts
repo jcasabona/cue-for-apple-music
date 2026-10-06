@@ -551,3 +551,24 @@ end try
 		return undefined;
 	}
 }
+
+/**
+ * Reads the name of the playlist currently playing.
+ * @returns The playlist name, or undefined when Music is closed or reports none.
+ */
+export async function getCurrentPlaylist(): Promise<string | undefined> {
+	if (!(await isMusicRunning())) {
+		return undefined;
+	}
+
+	const out = await command(
+		`	try
+		return name of current playlist
+	on error
+		return ""
+	end try`,
+		"Read current playlist",
+	);
+
+	return out || undefined;
+}

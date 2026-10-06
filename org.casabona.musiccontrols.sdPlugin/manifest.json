@@ -164,6 +164,22 @@
 			]
 		},
 		{
+			"Name": "Current Playlist",
+			"UUID": "org.casabona.musiccontrols.current-playlist",
+			"Icon": "imgs/actions/playlist/icon",
+			"Tooltip": "Show the name of the playlist that is playing.",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "imgs/actions/playlist/key",
+					"TitleAlignment": "bottom",
+					"FontSize": 10
+				}
+			]
+		},
+		{
 			"Name": "Volume",
 			"UUID": "org.casabona.musiccontrols.volume-dial",
 			"Icon": "imgs/actions/volume-dial/icon",

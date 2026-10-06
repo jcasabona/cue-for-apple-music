@@ -1,5 +1,6 @@
 import streamDeck from "@elgato/streamdeck";
 
+import { CurrentPlaylist } from "./actions/current-playlist.js";
 import { Favorite } from "./actions/favorite.js";
 import { NextTrack } from "./actions/next-track.js";
 import { Playlist } from "./actions/playlist.js";
@@ -19,6 +20,7 @@ streamDeck.actions.registerAction(new Shuffle());
 streamDeck.actions.registerAction(new Repeat());
 streamDeck.actions.registerAction(new Favorite());
 streamDeck.actions.registerAction(new Playlist());
+streamDeck.actions.registerAction(new CurrentPlaylist());
 streamDeck.actions.registerAction(new VolumeDial());
 streamDeck.actions.registerAction(new TransportDial());
 
