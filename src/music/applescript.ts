@@ -33,6 +33,9 @@ const SEP = "\u001e";
 
 const OSASCRIPT_TIMEOUT_MS = 5_000;
 
+/** Enumerating a large playlist library takes far longer than reading the status. */
+const LIST_TIMEOUT_MS = 30_000;
+
 /** Scratch directory for artwork, created once per plugin run. */
 const SCRATCH = mkdtempSync(join(tmpdir(), "music-controls-"));
 
@@ -124,11 +127,17 @@ function reportOnce(context: string, detail: string): void {
  * @param file Executable path.
  * @param args Arguments.
  * @param context Label used if it fails, for the log.
+ * @param timeoutMs How long to wait before killing the command.
  * @returns Stdout, or undefined if the command failed.
  */
-function run(file: string, args: string[], context: string): Promise<string | undefined> {
+function run(
+	file: string,
+	args: string[],
+	context: string,
+	timeoutMs = OSASCRIPT_TIMEOUT_MS,
+): Promise<string | undefined> {
 	return new Promise((resolve) => {
-		execFile(file, args, { timeout: OSASCRIPT_TIMEOUT_MS, maxBuffer: 32 * 1024 * 1024 }, (error, stdout, stderr) => {
+		execFile(file, args, { timeout: timeoutMs, maxBuffer: 32 * 1024 * 1024 }, (error, stdout, stderr) => {
 			if (error) {
 				// The message osascript prints is the whole diagnosis: a syntax error names the
 				// offending token, a permissions failure says so outright. Throwing it away is
@@ -147,10 +156,11 @@ function run(file: string, args: string[], context: string): Promise<string | un
  * Runs an AppleScript.
  * @param script AppleScript source.
  * @param context Label used if it fails, for the log.
+ * @param timeoutMs How long to wait before killing the script.
  * @returns Script output, or undefined on failure.
  */
-function osascript(script: string, context: string): Promise<string | undefined> {
-	return run("/usr/bin/osascript", ["-e", script], context);
+function osascript(script: string, context: string, timeoutMs?: number): Promise<string | undefined> {
+	return run("/usr/bin/osascript", ["-e", script], context, timeoutMs);
 }
 
 /**
@@ -346,10 +356,11 @@ export async function getStatus(): Promise<MusicStatus> {
  * closed -- pressing Play should start the app.
  * @param body AppleScript statements to run inside a `tell application "Music"` block.
  * @param context Label used if it fails, for the log.
+ * @param timeoutMs How long to wait before killing the script.
  * @returns Trimmed script output, or undefined on failure.
  */
-function command(body: string, context: string): Promise<string | undefined> {
-	return osascript(`tell application "Music"\n${body}\nend tell`, context);
+function command(body: string, context: string, timeoutMs?: number): Promise<string | undefined> {
+	return osascript(`tell application "Music"\n${body}\nend tell`, context, timeoutMs);
 }
 
 /** Toggles between playing and paused, starting Music if it is not running. */
@@ -457,22 +468,29 @@ export async function listPlaylists(): Promise<string[]> {
 		return [];
 	}
 
+	// Joined with the record separator rather than left to osascript's list formatting, which
+	// is comma-separated and so splits any playlist name that contains a comma. A large
+	// library also needs longer than a status read to enumerate.
 	const out = await command(
 		`	try
-		return name of every user playlist
+		set oldDelimiters to AppleScript's text item delimiters
+		set AppleScript's text item delimiters to (character id 30)
+		set joinedNames to (name of every user playlist) as text
+		set AppleScript's text item delimiters to oldDelimiters
+		return joinedNames
 	on error
 		return ""
 	end try`,
 		"List playlists",
+		LIST_TIMEOUT_MS,
 	);
 
 	if (!out) {
 		return [];
 	}
 
-	// AppleScript returns a list as comma-space separated text through osascript.
 	return out
-		.split(", ")
+		.split(SEP)
 		.map((name) => name.trim())
 		.filter(Boolean);
 }
