@@ -3,7 +3,7 @@ import streamDeck, { action, SingletonAction, type WillAppearEvent, type WillDis
 import { poller } from "../music/poller.js";
 
 /** Longest line, in characters, that fits inside the record label. */
-const LINE_CHARS = 10;
+const LINE_CHARS = 8;
 
 /** Lines of text the record label holds. */
 const MAX_LINES = 3;
@@ -48,21 +48,20 @@ function wrap(name: string): string[] {
  */
 function render(name: string | undefined): string {
 	const lines = wrap(name ?? "No playlist");
-	const first = 72 - ((lines.length - 1) * 15) / 2 + 5;
+	const first = 72 - ((lines.length - 1) * 20) / 2 + 6;
 	const text = lines
 		.map((line, i) => {
 			const safe = line.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-			return `<text x="72" y="${first + i * 15}" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#0B0B0B">${safe}</text>`;
+			return `<text x="72" y="${first + i * 20}" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="19" font-weight="800" fill="#000">${safe}</text>`;
 		})
 		.join("");
 
 	const svg =
 		`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144 144" width="144" height="144">` +
 		`<rect width="144" height="144" fill="#000"/>` +
-		`<circle cx="72" cy="72" r="68" fill="#1A1A1A"/>` +
-		`<circle cx="72" cy="72" r="58" fill="none" stroke="#333" stroke-width="1"/>` +
-		`<circle cx="72" cy="72" r="50" fill="none" stroke="#333" stroke-width="1"/>` +
-		`<circle cx="72" cy="72" r="42" fill="#4AC3FF"/>` +
+		`<circle cx="72" cy="72" r="70" fill="#2A2A2A"/>` +
+		`<circle cx="72" cy="72" r="62" fill="none" stroke="#555" stroke-width="1"/>` +
+		`<circle cx="72" cy="72" r="56" fill="#FFF"/>` +
 		text +
 		`</svg>`;
 
