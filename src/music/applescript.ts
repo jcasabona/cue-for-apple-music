@@ -88,6 +88,8 @@ export type MusicStatus = {
 	repeat?: RepeatMode;
 	/** Whether the current track is favorited, or undefined when Music would not report it. */
 	favorited?: boolean;
+	/** Name of the playlist playing, or undefined when Music would not report it. */
+	playlist?: string;
 	/** Stable identity for the current track. Empty when unknown. */
 	trackId: string;
 	/** True when Music is playing but refused to name what. */
@@ -186,6 +188,7 @@ set shuffleText to ""
 set repeatText to ""
 set favoriteText to ""
 set trackIdentifier to ""
+set playlistName to ""
 
 tell application "Music"
 	try
@@ -224,6 +227,9 @@ tell application "Music"
 		set trackIdentifier to (persistent ID of current track)
 	end try
 	try
+		set playlistName to (name of current playlist)
+	end try
+	try
 		if (favorited of current track) then
 			set favoriteText to "1"
 		else
@@ -240,7 +246,7 @@ tell application "Music"
 	end try
 end tell
 
-return playerStateText & fieldSeparator & volumeText & fieldSeparator & positionText & fieldSeparator & durationText & fieldSeparator & trackTitle & fieldSeparator & trackArtist & fieldSeparator & trackAlbum & fieldSeparator & shuffleText & fieldSeparator & repeatText & fieldSeparator & favoriteText & fieldSeparator & trackIdentifier
+return playerStateText & fieldSeparator & volumeText & fieldSeparator & positionText & fieldSeparator & durationText & fieldSeparator & trackTitle & fieldSeparator & trackArtist & fieldSeparator & trackAlbum & fieldSeparator & shuffleText & fieldSeparator & repeatText & fieldSeparator & favoriteText & fieldSeparator & trackIdentifier & fieldSeparator & playlistName
 `;
 
 /**
@@ -312,7 +318,7 @@ export async function getStatus(): Promise<MusicStatus> {
 		return { ...OFFLINE, running: true };
 	}
 
-	const [state, volume, position, duration, title, artist, album, shuffle, repeat, favorited, trackId] =
+	const [state, volume, position, duration, title, artist, album, shuffle, repeat, favorited, trackId, playlist] =
 		out.split(SEP);
 
 	const playerState = toPlayerState(state ?? "");
@@ -329,6 +335,7 @@ export async function getStatus(): Promise<MusicStatus> {
 		shuffle: shuffle ? shuffle === "1" : undefined,
 		repeat: repeat ? toRepeatMode(repeat) : undefined,
 		favorited: favorited ? favorited === "1" : undefined,
+		playlist: playlist || undefined,
 		trackId: trackId ?? "",
 		metadataUnavailable: playerState === "playing" && !title,
 	};
